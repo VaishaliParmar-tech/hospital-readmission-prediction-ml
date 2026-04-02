@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prediction — MediPredict</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-brand">
+    <div class="brand-icon"></div>
+    <div class="brand-text">Medi<span>Predict</span></div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="/"><span>Home</span></a></li>
+    <li><a href="/prediction" class="active"><span>Prediction</span></a></li>
+    <li><a href="/about"><span>About</span></a></li>
+  </ul>
+</nav>
+
+<div class="page-wrapper">
+
+  <div class="page-header">
+    <h1>Patient Readmission Prediction</h1>
+    <p>Enter patient clinical data below and click Predict to get an instant AI-powered readmission risk assessment.</p>
+  </div>
+
+  <div class="section" style="max-width:1200px;">
+
+    {% if not model_ready %}
+    <div class="info-box" style="border-color:#e63946; background:rgba(230,57,70,0.07);">
+      <span class="info-icon">⚠️</span>
+      <p><strong>Model not ready.</strong> Please run <code style="background:rgba(0,0,0,0.07);padding:2px 6px;border-radius:4px;">python train_model.py</code> in the project folder to train the model first. This takes a few minutes.</p>
+    </div>
+    {% else %}
+    <div class="info-box">
+      <span class="info-icon">ℹ️</span>
+      <p>Model is loaded and ready. Fill in all patient details below. The prediction uses our <strong>Random Forest</strong> classifier trained with <strong>5-fold cross-validation</strong>.</p>
+    </div>
+    {% endif %}
+
+    <!-- Graph Toggle Buttons -->
+    <div class="graph-controls">
+      <button class="graph-toggle-btn" id="dataGraphBtn" onclick="togglePanel('dataPanel', this)">
+        <span class="toggle-icon"></span> Data Graphs
+      </button>
+      <button class="graph-toggle-btn" id="modelGraphBtn" onclick="togglePanel('modelPanel', this)">
+        <span class="toggle-icon"></span> Model Graphs
+      </button>
+    </div>
+
+    <!-- Data Graphs Panel -->
+    <div class="graph-panel" id="dataPanel">
+      <div class="card" style="margin-bottom:1.5rem;">
+        <h3 class="section-title" style="font-size:1.5rem; margin-bottom:0.5rem;"> Data Analysis Graphs</h3>
+        <div class="divider"></div>
+        <div class="graph-grid">
+          <div class="graph-item">
+            <h4>Dataset Overview — Readmission Distribution</h4>
+            <img src="{{ url_for('static', filename='graphs/data_overview.png') }}" alt="Data Overview" loading="lazy" />
+          </div>
+          <div class="graph-item">
+            <h4>Age Distribution</h4>
+            <img src="{{ url_for('static', filename='graphs/age_distribution.png') }}" alt="Age Distribution" loading="lazy" />
+          </div>
+          <div class="graph-item">
+            <h4>Yes / No Columns Distribution</h4>
+            <img src="{{ url_for('static', filename='graphs/yes_no_bar.png') }}" alt="Yes/No Bar Chart" loading="lazy" />
+          </div>
+          <div class="graph-item">
+            <h4>Feature Correlation Heatmap</h4>
+            <img src="{{ url_for('static', filename='graphs/heatmap.png') }}" alt="Heatmap" loading="lazy" />
+          </div>
+          <div class="graph-item" style="grid-column: 1 / -1;">
+            <h4>All Feature Distributions</h4>
+            <img src="{{ url_for('static', filename='graphs/feature_distributions.png') }}" alt="Feature Distributions" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Model Graphs Panel -->
+    <div class="graph-panel" id="modelPanel">
+      <div class="card" style="margin-bottom:1.5rem;">
+        <h3 class="section-title" style="font-size:1.5rem; margin-bottom:0.5rem;">Model Analysis Graphs</h3>
+        <div class="divider"></div>
+        <div class="graph-grid">
+          <div class="graph-item">
+            <h4>Model Accuracy Comparison (CV=5)</h4>
+            <img src="{{ url_for('static', filename='graphs/model_accuracy_bar.png') }}" alt="Model Accuracy" loading="lazy" />
+          </div>
+          <div class="graph-item">
+            <h4>ROC Curves — All Models</h4>
+            <img src="{{ url_for('static', filename='graphs/roc_curve.png') }}" alt="ROC Curve" loading="lazy" />
+          </div>
+          <div class="graph-item">
+            <h4>Confusion Matrix — Random Forest</h4>
+            <img src="{{ url_for('static', filename='graphs/confusion_matrix.png') }}" alt="Confusion Matrix" loading="lazy" />
+          </div>
+          <div class="graph-item">
+            <h4>Feature Importance — Random Forest</h4>
+            <img src="{{ url_for('static', filename='graphs/feature_importance.png') }}" alt="Feature Importance" loading="lazy" />
+          </div>
+          <div class="graph-item">
+            <h4>Overfitting / Underfitting Analysis</h4>
+            <img src="{{ url_for('static', filename='graphs/overfitting_graph.png') }}" alt="Overfitting Graph" loading="lazy" />
+          </div>
+          <div class="graph-item">
+            <h4>Random Forest — CV=5 Fold Scores</h4>
+            <img src="{{ url_for('static', filename='graphs/cv_scores.png') }}" alt="CV Scores" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Prediction Form -->
+    <div class="card">
+      <h3 class="section-title" style="font-size:1.5rem; margin-bottom:0.5rem;">Patient Data Entry Form</h3>
+      <div class="divider"></div>
+
+      <div class="form-section-title">Clinical Measurements</div>
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label for="time_in_hospital">Time in Hospital (days)</label>
+          <input type="number" id="time_in_hospital" placeholder="Enter number of days" min="1" max="13" step="1" />
+          <!-- <small class="form-hint">total number of days the patient stayed in the hospital </small> -->
+        </div>
+
+        <div class="form-group">
+          <label for="n_lab_procedures">Number of Lab Procedures</label>
+          <input type="number" id="n_lab_procedures" placeholder="Enter lab procedure count" min="10" max="99" />
+          <!-- <small class="form-hint">total number of lab tests / procedures performed during the hospital stay</small> -->
+        </div>
+
+        <div class="form-group">
+          <label for="n_procedures">Number of Non-lab Procedures</label>
+          <input type="number" id="n_procedures" placeholder="Enter procedure count" min="0" max="5" />
+          <!-- <small class="form-hint">total number of non-lab medical procedures done on the patient</small> -->
+        </div>
+
+        <div class="form-group">
+          <label for="n_medications">Number of Medications</label>
+          <input type="number" id="n_medications" placeholder="Enter medication count" min="5" max="29" />
+          <!-- <small class="form-hint">total number of distinct medications prescribed to the patient</small> -->
+        </div>
+
+        <div class="form-group">
+          <label for="n_outpatient">Outpatient Visits (last year)</label>
+          <input type="number" id="n_outpatient" placeholder="Enter outpatient visit count" min="0" max="4" />
+          <!-- <small class="form-hint">total number of outpatient (non-admitted) clinic visits by patient </small> -->
+        </div>
+
+        <div class="form-group">
+          <label for="n_inpatient">Inpatient Visits (last year)</label>
+          <input type="number" id="n_inpatient" placeholder="Enter inpatient visit count" min="0" max="4" />
+          <!-- <small class="form-hint">total number of times patient was admitted to hospital as an inpatient</small> -->
+        </div>
+
+        <div class="form-group">
+          <label for="n_emergency">Emergency Visits (last year)</label>
+          <input type="number" id="n_emergency" placeholder="Enter emergency visit count" min="0" max="50" />
+          <!-- <small class="form-hint"> total number of emergency visits made by patient</small> -->
+        </div>
+
+      </div>
+
+      <div class="form-section-title">Patient Demographics &amp; Diagnosis</div>
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label for="age">Age Group</label>
+          <select id="age">
+            <option value="" disabled selected>Select age group</option>
+            {% for ag in age_groups %}
+            <option value="{{ ag }}">{{ ag }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="medical_specialty">Medical Specialty</label>
+          <select id="medical_specialty">
+            <option value="" disabled selected>Select specialty</option>
+            {% for ms in med_specialty %}
+            <option value="{{ ms }}">{{ ms }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="diag_1">Primary Diagnosis</label>
+          <select id="diag_1">
+            <option value="" disabled selected>Select diagnosis</option>
+            {% for d in diag_options %}
+            <option value="{{ d }}">{{ d }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="diag_2"> Secondary Diagnosis</label>
+          <select id="diag_2">
+            <option value="" disabled selected>Select diagnosis</option>
+            {% for d in diag_options %}
+            <option value="{{ d }}">{{ d }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="diag_3">Tertiary Diagnosis</label>
+          <select id="diag_3">
+            <option value="" disabled selected>Select diagnosis</option>
+            {% for d in diag_options %}
+            <option value="{{ d }}">{{ d }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="glucose_test">Glucose Test Result</label>
+          <select id="glucose_test">
+            <option value="" disabled selected>Select result</option>
+            {% for g in glucose_opts %}
+            <option value="{{ g }}">{{ g | capitalize }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="A1Ctest">A1C Test Result</label>
+          <select id="A1Ctest">
+            <option value="" disabled selected>Select result</option>
+            {% for a in a1c_opts %}
+            <option value="{{ a }}">{{ a | capitalize }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="change">Medication Change</label>
+          <select id="change">
+            <option value="" disabled selected>Select</option>
+            {% for c in change_opts %}
+            <option value="{{ c }}">{{ c | capitalize }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="diabetes">On Diabetes Medication</label>
+          <select id="diabetes">
+            <option value="" disabled selected>Select</option>
+            {% for d in diabetes_opts %}
+            <option value="{{ d }}">{{ d | capitalize }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+      </div>
+
+      <div style="margin-top:2rem; display:flex; gap:1rem; flex-wrap:wrap; align-items:center;">
+        <button class="btn btn-primary" onclick="runPrediction()"
+                {% if not model_ready %}disabled style="opacity:0.5;cursor:not-allowed;"{% endif %}
+                style="font-size:1.05rem; padding:0.9rem 2.5rem;">
+          Predict Readmission
+        </button>
+        <button class="btn btn-outline" onclick="resetForm()">
+          Reset Form
+        </button>
+      </div>
+
+      <div class="spinner-wrapper" id="spinner">
+        <div class="spinner"></div>
+        <p class="spinner-text">Running Random Forest prediction…</p>
+      </div>
+
+      <div class="result-card" id="resultCard">
+        <div class="result-label">PREDICTION RESULT — RANDOM FOREST</div>
+        <div class="result-verdict" id="resultVerdict">—</div>
+        <div class="result-probability" id="resultProb">—</div>
+        <div class="prob-bar-outer">
+          <div class="prob-bar-inner" id="probBar" style="width:0%"></div>
+        </div>
+        <p style="margin-top:1.25rem; font-size:0.82rem; color:rgba(255,255,255,0.5);">
+          Predicted by Random Forest · 5-fold Cross Validated
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <p><span>MediPredict</span> — Hospital Readmission Prediction · Flask + Random Forest</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function togglePanel(panelId, btn) {
+  const panel = document.getElementById(panelId);
+  const isOpen = panel.classList.contains('show');
+  document.querySelectorAll('.graph-panel').forEach(p => p.classList.remove('show'));
+  document.querySelectorAll('.graph-toggle-btn').forEach(b => b.classList.remove('active'));
+  if (!isOpen) {
+    panel.classList.add('show');
+    btn.classList.add('active');
+    setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  }
+}
+
+async function runPrediction() {
+  const allFields = [
+    'time_in_hospital','n_lab_procedures','n_procedures','n_medications',
+    'n_outpatient','n_inpatient','n_emergency',
+    'age','medical_specialty','diag_1','diag_2','diag_3',
+    'glucose_test','A1Ctest','change','diabetes'
+  ];
+
+  const data = {};
+  const missing = [];
+  allFields.forEach(f => {
+    const el = document.getElementById(f);
+    if (!el || el.value === '' || el.value === null) {
+      missing.push(f.replace(/_/g, ' '));
+    } else {
+      data[f] = el.value;
+    }
+  });
+
+  if (missing.length > 0) {
+    showToast('⚠️ Please fill: ' + missing.slice(0, 3).join(', ') + (missing.length > 3 ? ' …and more' : ''));
+    return;
+  }
+
+  document.getElementById('spinner').classList.add('show');
+  document.getElementById('resultCard').classList.remove('show');
+
+  try {
+    const res  = await fetch('/predict', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    const json = await res.json();
+    document.getElementById('spinner').classList.remove('show');
+
+    if (json.error) { showToast('❌ Error: ' + json.error); return; }
+
+    const isHigh = json.prediction === 'yes';
+    document.getElementById('resultVerdict').textContent =
+      isHigh ? '⚠️  HIGH RISK — Likely to be Readmitted'
+             : '✅  LOW RISK — Unlikely to be Readmitted';
+    document.getElementById('resultVerdict').className =
+      'result-verdict ' + (isHigh ? 'high' : 'low');
+    document.getElementById('resultProb').textContent =
+      'Readmission Probability: ' + json.probability + '%';
+
+    const card = document.getElementById('resultCard');
+    card.classList.add('show');
+    setTimeout(() => { document.getElementById('probBar').style.width = json.probability + '%'; }, 120);
+    setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 200);
+
+  } catch(e) {
+    document.getElementById('spinner').classList.remove('show');
+    showToast('❌ Network error. Is the Flask server running?');
+  }
+}
+
+function resetForm() {
+  document.querySelectorAll('input[type=number]').forEach(el => el.value = '');
+  document.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
+  document.getElementById('resultCard').classList.remove('show');
+  document.getElementById('probBar').style.width = '0%';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3800);
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — MediPredict</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-brand">
+    <div class="brand-icon"></div>
+    <div class="brand-text">Medi<span>Predict</span></div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="/"><span>Home</span></a></li>
+    <li><a href="/prediction"><span>Prediction</span></a></li>
+    <li><a href="/about" class="active"><span>About</span></a></li>
+  </ul>
+</nav>
+
+<div class="page-wrapper">
+
+  <!-- ── Page Header ──────────────────────────────────────── -->
+  <div class="about-hero">
+    <h1>About This Project</h1>
+    <p>A Machine Learning approach to predict hospital readmission in diabetic patients — built with passion by our team.</p>
+  </div>
+
+  <div class="section" style="max-width:1100px;">
+
+    <!-- ── Project Explanation ──────────────────────────── -->
+    <div class="section-title">Project Overview</div>
+    <div class="divider"></div>
+
+    <div class="card animate-fade" style="margin-bottom:2rem;">
+      <p style="font-size:1rem; color:var(--muted); line-height:1.8; margin-bottom:1rem;">
+        <strong style="color:var(--navy);">Hospital Readmission Prediction</strong> is a supervised machine learning project that aims to predict whether a diabetic patient will be re-admitted to a hospital within 30 days of discharge. Early identification of high-risk patients enables hospitals to allocate resources effectively, improve care quality, and reduce preventable readmissions.
+      </p>
+      <p style="font-size:1rem; color:var(--muted); line-height:1.8; margin-bottom:1rem;">
+        The dataset contains <strong style="color:var(--blue);">2,200 records</strong> of diabetic patients with <strong style="color:var(--blue);">17 clinical features</strong> including age, duration of hospital stay, number of lab procedures, medications, diagnoses, and glucose/A1C test results.
+      </p>
+      <p style="font-size:1rem; color:var(--muted); line-height:1.8;">
+        Our primary model is a <strong style="color:var(--blue);">Random Forest Classifier</strong>, chosen for its excellent performance on tabular medical data, resistance to overfitting, and inherent feature importance analysis. Six other classifiers are trained for comparative benchmarking — all evaluated with <strong style="color:var(--blue);">5-fold cross-validation</strong>.
+      </p>
+    </div>
+
+    <!-- ── Methodology ───────────────────────────────────── -->
+    <div class="section-title" style="margin-top:2rem;">⚙️ Methodology</div>
+    <div class="divider"></div>
+
+    <div class="method-steps" style="margin-bottom:2rem;">
+      <div class="method-step animate-fade">
+        <span class="step-num">01</span>
+        <h4>Data Loading</h4>
+        <p>Patient hospital records loaded from Excel/CSV. 17 clinical features for 2,200 patients with binary readmission target.</p>
+      </div>
+      <div class="method-step animate-fade-delay-1">
+        <span class="step-num">02</span>
+        <h4>Preprocessing</h4>
+        <p>Median imputation for numerical columns, mode imputation for categorical. IQR-based outlier capping to clip extreme values.</p>
+      </div>
+      <div class="method-step animate-fade-delay-2">
+        <span class="step-num">03</span>
+        <h4>Encoding</h4>
+        <p>Label encoding applied to all categorical variables (age, diagnoses, test results, etc.) using scikit-learn LabelEncoder.</p>
+      </div>
+      <div class="method-step animate-fade-delay-3">
+        <span class="step-num">04</span>
+        <h4>Train/Test Split</h4>
+        <p>80/20 stratified train-test split with random_state=42 for reproducibility. 1,760 training, 440 test samples.</p>
+      </div>
+      <div class="method-step animate-fade">
+        <span class="step-num">05</span>
+        <h4>Model Training</h4>
+        <p>Random Forest primary model + 6 comparative models (LR, DT, SVM, KNN, AdaBoost, Naive Bayes). CV=5 evaluation.</p>
+      </div>
+      <div class="method-step animate-fade-delay-1">
+        <span class="step-num">06</span>
+        <h4>Evaluation</h4>
+        <p>Accuracy, ROC-AUC, Confusion Matrix, Feature Importance, Overfitting analysis visualised across all models.</p>
+      </div>
+    </div>
+
+    <!-- ── Technologies ──────────────────────────────────── -->
+    <div class="section-title" style="margin-top:2rem;"> Technologies Used</div>
+    <div class="divider"></div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.25rem; margin-bottom:2rem;">
+
+      <div class="card animate-fade">
+        <h4 style="font-family:var(--font-head); color:var(--navy); margin-bottom:0.75rem;">🐍 Python & ML Stack</h4>
+        <div class="tech-pills">
+          <span class="tech-pill">Python 3.12</span>
+          <span class="tech-pill">scikit-learn</span>
+          <span class="tech-pill">pandas</span>
+          <span class="tech-pill">numpy</span>
+          <span class="tech-pill">RandomForest</span>
+          <span class="tech-pill">AdaBoost</span>
+          <span class="tech-pill">SVM</span>
+          <span class="tech-pill">KNN</span>
+        </div>
+      </div>
+
+      <div class="card animate-fade-delay-1">
+        <h4 style="font-family:var(--font-head); color:var(--navy); margin-bottom:0.75rem;">Web Framework</h4>
+        <div class="tech-pills">
+          <span class="tech-pill">Flask</span>
+          <span class="tech-pill">Jinja2</span>
+          <span class="tech-pill">HTML5</span>
+          <span class="tech-pill">CSS3</span>
+          <span class="tech-pill">JavaScript</span>
+          <span class="tech-pill">REST API</span>
+        </div>
+      </div>
+
+      <div class="card animate-fade-delay-2">
+        <h4 style="font-family:var(--font-head); color:var(--navy); margin-bottom:0.75rem;">Visualization</h4>
+        <div class="tech-pills">
+          <span class="tech-pill">matplotlib</span>
+          <span class="tech-pill">seaborn</span>
+          <span class="tech-pill">ROC Curve</span>
+          <span class="tech-pill">Confusion Matrix</span>
+          <span class="tech-pill">Heatmap</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Key Metrics ─────────────────────────────────── -->
+    <div class="section-title" style="margin-top:2rem;">Key Model Details</div>
+    <div class="divider"></div>
+
+    <div class="card animate-fade" style="margin-bottom:2rem;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1.25rem;">
+        <div style="text-align:center; padding:1rem; background:var(--bg); border-radius:var(--radius);">
+          <div style="font-size:1.8rem; font-family:var(--font-head); color:var(--aqua); font-weight:900;">RF</div>
+          <div style="font-size:0.92rem; color:var(--muted); margin-top:0.25rem;">Primary Model</div>
+        </div>
+        <div style="text-align:center; padding:1rem; background:var(--bg); border-radius:var(--radius);">
+          <div style="font-size:1.8rem; font-family:var(--font-head); color:var(--aqua); font-weight:900;">300</div>
+          <div style="font-size:0.92rem; color:var(--muted); margin-top:0.25rem;">Decision Trees</div>
+        </div>
+        <div style="text-align:center; padding:1rem; background:var(--bg); border-radius:var(--radius);">
+          <div style="font-size:1.8rem; font-family:var(--font-head); color:var(--aqua); font-weight:900;">5</div>
+          <div style="font-size:0.92rem; color:var(--muted); margin-top:0.25rem;">Cross-Val Folds</div>
+        </div>
+        <div style="text-align:center; padding:1rem; background:var(--bg); border-radius:var(--radius);">
+          <div style="font-size:1.8rem; font-family:var(--font-head); color:var(--aqua); font-weight:900;">7</div>
+          <div style="font-size:0.92rem; color:var(--muted); margin-top:0.25rem;">Models Compared</div>
+        </div>
+        <div style="text-align:center; padding:1rem; background:var(--bg); border-radius:var(--radius);">
+          <div style="font-size:1.8rem; font-family:var(--font-head); color:var(--aqua); font-weight:900;">IQR</div>
+          <div style="font-size:0.92rem; color:var(--muted); margin-top:0.25rem;">Outlier Method</div>
+        </div>
+        <div style="text-align:center; padding:1rem; background:var(--bg); border-radius:var(--radius);">
+          <div style="font-size:1.8rem; font-family:var(--font-head); color:var(--aqua); font-weight:900;">17</div>
+          <div style="font-size:0.92rem; color:var(--muted); margin-top:0.25rem;">Features Used</div>
+        </div>
+      </div>
+    </div>
+
+    <
+
+    <!-- ── Guide ─────────────────────────────────────────── -->
+    <div class="card animate-fade" style="background: linear-gradient(135deg, var(--navy), var(--blue-dark)); color:white;">
+      <h3 style="font-family:var(--font-head); font-size:1.4rem; color:var(--aqua); margin-bottom:0.75rem;">🎓 Project Guide</h3>
+      <p style="color:rgba(255,255,255,0.8); line-height:1.7;">
+        This project was developed as part of our curriculum on Machine Learning and Data Science.
+        We applied real-world medical data to build a complete end-to-end ML pipeline — from raw data
+        preprocessing to web deployment — with a focus on model interpretability and clinical relevance.
+      </p>
+      <p style="color:rgba(255,255,255,0.7); margin-top:0.75rem; font-size:0.9rem;">
+        The primary focus is on <strong style="color:var(--aqua);">Random Forest</strong> as our main classifier, 
+        with GridSearchCV tuning and 5-fold cross-validation ensuring robust and generalizable results.
+      </p>
+    </div>
+
+  </div><!-- end section -->
+
+</div><!-- end page-wrapper -->
+
+<footer class="footer">
+  <p><span>MediPredict</span> — Vaishali Parmar · ML Project</p>
+</footer>
+
+</body>
+</html>

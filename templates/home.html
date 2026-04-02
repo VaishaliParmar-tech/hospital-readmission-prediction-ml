@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediPredict — Hospital Readmission Prediction</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏥</text></svg>" />
+</head>
+<body>
+
+<!-- ── Navbar ─────────────────────────────────────────── -->
+<nav class="navbar">
+  <div class="nav-brand">
+    <div class="brand-icon"></div>
+    <div class="brand-text">Medi<span>Predict</span></div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="/" class="active"><span>Home</span></a></li>
+    <li><a href="/prediction"><span>Prediction</span></a></li>
+    <li><a href="/about"> <span>About</span></a></li>
+  </ul>
+</nav>
+
+<div class="page-wrapper">
+
+  <!-- ── Hero ──────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge animate-fade">Machine Learning · Healthcare Analytics</div>
+      <h1 class="animate-fade-delay-1">
+        Hospital Readmission<br><span class="highlight">Prediction System</span>
+      </h1>
+      <p class="hero-desc animate-fade-delay-2">
+        An intelligent ML-powered platform that predicts whether a diabetic patient will
+        be readmitted to the hospital — enabling clinicians to act proactively
+        and improve patient outcomes.
+      </p>
+
+
+
+      <a href="/prediction" class="btn btn-primary animate-fade-delay-3" style="font-size:1.05rem; padding: 1rem 2.5rem;">
+        Start Prediction
+      </a>
+    </div>
+  </section>
+
+  <!-- ── Stats Strip ────────────────────────────────────── -->
+  <div class="stats-strip">
+    <div class="stats-inner">
+      <div class="stat-item">
+        <div class="stat-num">2,200</div>
+        <div class="stat-label">Patient Records</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">17</div>
+        <div class="stat-label">Clinical Features</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">7</div>
+        <div class="stat-label">ML Models Compared</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">CV=5</div>
+        <div class="stat-label">Cross Validation</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">RF</div>
+        <div class="stat-label">Primary Model</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── How It Works ───────────────────────────────────── -->
+  <div class="section">
+    <div class="section-title">How It Works</div>
+    <div class="divider"></div>
+    <p class="section-subtitle">A complete machine learning pipeline from raw data to actionable predictions.</p>
+
+    <div class="method-steps">
+      <div class="method-step animate-fade">
+        <span class="step-num">01</span>
+        <h4>Data Collection</h4>
+        <p>Hospital records of 2,200 diabetic patients with 17 clinical features including lab results, diagnoses, and demographics.</p>
+      </div>
+      <div class="method-step animate-fade-delay-1">
+        <span class="step-num">02</span>
+        <h4>Preprocessing</h4>
+        <p>Missing value imputation (median/mode), IQR outlier capping, and label encoding for categorical variables.</p>
+      </div>
+      <div class="method-step animate-fade-delay-2">
+        <span class="step-num">03</span>
+        <h4>Model Training</h4>
+        <p>Random Forest as the primary model with 7 comparative classifiers. All evaluated with 5-fold cross-validation.</p>
+      </div>
+      <div class="method-step animate-fade-delay-3">
+        <span class="step-num">04</span>
+        <h4>Prediction</h4>
+        <p>Enter patient data, get instant readmission risk prediction with probability score and risk classification.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Features Detail ────────────────────────────────── -->
+  <div style="background: linear-gradient(135deg, #f0f8ff, #e8f4fd); padding: 4rem 2rem;">
+    <div style="max-width:1100px; margin:0 auto;">
+      <div class="section-title" style="text-align:center;">Key Features</div>
+      <div class="divider" style="margin: 0.75rem auto 2rem;"></div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.5rem;">
+
+        <div class="card animate-fade">
+          <!-- <div style="font-size:2rem; margin-bottom:1rem;"></div> -->
+          <h3 style="font-family:var(--font-head); color:var(--navy); margin-bottom:0.5rem;">Random Forest — Primary Model</h3>
+          <p style="color:var(--muted); font-size:1rem; line-height:1.7;">Our main model uses a tuned Random Forest classifier with 300 trees, max depth 20, sqrt features, and bootstrap sampling — achieving superior accuracy and interpretability.</p>
+        </div>
+
+        <div class="card animate-fade-delay-1">
+          <!-- <div style="font-size:2rem; margin-bottom:1rem;"></div> -->
+          <h3 style="font-family:var(--font-head); color:var(--navy); margin-bottom:0.5rem;">Comprehensive Graph Suite</h3>
+          <p style="color:var(--muted); font-size:1rem; line-height:1.7;">Visualize data distributions, heatmaps, ROC curves, confusion matrices, feature importances, overfitting analysis and more — all colourful and interactive.</p>
+        </div>
+
+        <div class="card animate-fade-delay-2">
+          <!-- <div style="font-size:2rem; margin-bottom:1rem;"></div> -->
+          <h3 style="font-family:var(--font-head); color:var(--navy); margin-bottom:0.5rem;">Real-Time Prediction</h3>
+          <p style="color:var(--muted); font-size:1rem; line-height:1.7;">Submit patient clinical data through our intuitive form and receive an instant prediction with probability score and risk level classification.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CTA ────────────────────────────────────────────── -->
+  <div style="text-align:center; padding:4rem 2rem; background: linear-gradient(135deg, var(--navy), var(--blue-dark));">
+    <h2 style="font-family:var(--font-head); font-size:2rem; color:white; margin-bottom:0.75rem;">Ready to Predict?</h2>
+    <p style="color:rgba(255,255,255,0.7); margin-bottom:2rem; max-width:500px; margin-left:auto; margin-right:auto;">
+      Enter patient data and get an AI-powered readmission risk prediction instantly.
+    </p>
+    <a href="/prediction" class="btn btn-primary" style="font-size:1.05rem; padding:1rem 2.5rem;">
+      Go to Prediction Page
+    </a>
+  </div>
+
+</div><!-- end page-wrapper -->
+
+<!-- ── Footer ──────────────────────────────────────────── -->
+<footer class="footer">
+  <p><span>MediPredict</span> — Hospital Readmission Prediction · Built with Flask & Random Forest · Project</p>
+</footer>
+
+</body>
+</html>
