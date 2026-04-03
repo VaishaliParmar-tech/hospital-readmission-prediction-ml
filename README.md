@@ -3,13 +3,6 @@
 A complete Flask + Machine Learning web application that predicts hospital readmission
 for diabetic patients using a Random Forest classifier.
 
-## 👥 Team Members
-| Name | Roll No |
-|---|---|
-| Vaishali Parmar | 3230 |
-| Krushi Modi | 3043 |
-| Nandha Paneri | 3046 |
-
 ---
 
 ## 🚀 Quick Start (3 Steps)
