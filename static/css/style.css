@@ -583,29 +583,82 @@ img { max-width: 100%; display: block; }
   .section { padding: 3rem 1.25rem; }
   .features-grid { grid-template-columns: repeat(2, 1fr);}
 } */
-
 @media (max-width: 768px) {
-  .navbar { padding: 0 1.25rem; }
+
+  /* ── Navbar ── */
+  .navbar {
+    padding: 0 1.25rem;
+    height: 60px;
+  }
+
+  /* Hide nav links by default, show as dropdown on toggle */
   .nav-links {
     flex-direction: column;
     position: absolute;
     top: 60px;
     right: 0;
-    background: white;
+    background: rgba(3, 4, 94, 0.98);
     width: 100%;
     text-align: center;
     display: none;
+    padding: 0.5rem 0;
+    z-index: 999;
   }
   .nav-links.active { display: flex; }
-  .nav-links a span { display: inline; }
-  .graph-grid { grid-template-columns: 1fr; }
-  .hero {
-    padding: 4rem 1.25rem 3.5rem;
-    margin-top: 0 !important;
+  .nav-links a {
+    padding: 0.85rem 1rem;
+    border-radius: 0;
+    border-bottom: 1px solid rgba(0,180,216,0.1);
   }
-  .section { padding: 3rem 1.25rem; }
+
+  /* ── Page wrapper — remove extra top gap ── */
+  .page-wrapper { padding-top: 60px; }
+
+  /* ── Hero ── */
+  .hero {
+    padding: 3rem 1.25rem 2.5rem;
+  }
+  .hero h1 { font-size: 2rem; }
+  .hero-desc { font-size: 1rem; }
+
+  /* ── Page header ── */
+  .page-header {
+    padding: 2.5rem 1.25rem 2rem;
+  }
+
+  /* ── Features grid ── */
   .features-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* ── Section ── */
+  .section { padding: 2.5rem 1.25rem; }
+
+  /* ── Graph grid ── */
+  .graph-grid { grid-template-columns: 1fr; }
+
+  /* ── Graph controls ── */
+  .graph-controls { gap: 0.75rem; }
+  .graph-toggle-btn { padding: 0.6rem 1rem; font-size: 0.85rem; }
+
+  /* ── Form ── */
+  .form-grid { grid-template-columns: 1fr; }
+
+  /* ── Result card ── */
+  .result-card { padding: 1.75rem 1.25rem; }
+  .result-verdict { font-size: 1.9rem; }
+
+  /* ── Stats strip ── */
+  .stats-inner { grid-template-columns: repeat(2, 1fr); }
+
+  /* ── Team grid ── */
+  .team-grid { grid-template-columns: 1fr; }
+
+  /* ── Method steps ── */
+  .method-steps { grid-template-columns: 1fr; }
+
+  /* ── Toast ── */
+  .toast { bottom: 1rem; right: 1rem; left: 1rem; }
 }
+
 /* ── Info box ───────────────────────────────────────────────── */
 .info-box {
   background: linear-gradient(135deg, rgba(0,180,216,0.08), rgba(0,119,182,0.06));
